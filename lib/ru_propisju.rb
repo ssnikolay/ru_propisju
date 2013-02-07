@@ -185,7 +185,7 @@ module RuPropisju
     return zero(locale_data, integrals, fractions, locale == :ru) if amount.zero?
     
     parts = []
-    parts << propisju_int(amount.to_i, 1, integrals, locale) unless amount.to_i == 0
+    parts << amount unless amount.to_i == 0
     if amount.kind_of?(Float)
       remainder = (amount.divmod(1)[1]*100).round
       if (remainder == 100)
