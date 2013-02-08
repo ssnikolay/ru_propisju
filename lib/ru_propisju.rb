@@ -266,22 +266,25 @@ module RuPropisju
   # Выводит целое или дробное число как сумму в долларах прописью
   #
   #  dollarov(32) #=> "тридцать два доллара"
-  def dollarov(amount, locale = 'ru')
+  def dollarov(amount, number_mod = true, locale = 'ru')
     parts = []
     locale_root = pick_locale(TRANSLATIONS, locale)
 
     integrals = locale_root[:usd_integral]
     fractions = locale_root[:usd_fraction]
 
-    return zero(locale_root, integrals, fractions, locale == 'ru') if amount.zero?
+    parts << write_human_money_part(amount, integrals, locale, number_mod)
 
     parts << propisju_int(amount.to_i, 1, integrals, locale) unless amount.to_i == 0
     if amount.kind_of?(Float)
       remainder = (amount.divmod(1)[1]*100).round
       if (remainder == 100)
-        parts = [propisju_int(amount.to_i + 1, 1, integrals, locale)]
+        parts = write_human_money_part(amount + 1, integrals, locale, number_mod)
       else
-        parts << propisju_int(remainder.to_i, 1, fractions, locale)
+        kop = remainder.to_i
+        unless kop.zero?
+          parts << write_human_money_part(kop, fractions, locale, number_mod)
+        end
       end
     end
 
