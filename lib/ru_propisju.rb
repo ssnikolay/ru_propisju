@@ -177,6 +177,26 @@ module RuPropisju
   # Выводит целое или дробное число как сумму в рублях прописью
   #
   #   rublej(345.2) #=> "триста сорок пять рублей 20 копеек"
+  
+  def write_human_money_part(number, locale_data, locale, number_mod)
+    if number_mod #прописью или цифрами
+      #parts << number.to_i << choose_plural(number.to_i, locale_data)
+      write_amount_of_money_as_number (number.to_i, locale_data)
+    else
+      #parts << propisju_int(number.to_i, 1, locale_data, locale)
+      write_amount_of_money_as_word (number.to_i, locale_data, locale)
+    end
+  end
+
+  def write_amount_of_money_as_number(number, locale_data)
+    number << choose_plural(number, locale_data)
+  end
+
+  def write_amount_of_money_as_word(number, locale_data, locale)
+    propisju_int(number, 1, locale_data, locale)
+  end
+
+
   def rublej(amount, number_mod = true, locale = :ru)
     locale_data = pick_locale(TRANSLATIONS, locale)
     integrals = locale_data[:rub_integral]
@@ -186,29 +206,32 @@ module RuPropisju
 
     parts = []
 
-    if number_mod #прописью или цифрами
-      parts << amount.to_i << choose_plural(amount.to_i, integrals)
-    else
-      parts << propisju_int(amount.to_i, 1, integrals, locale)
-    end
+    #if number_mod #прописью или цифрами
+    #  parts << amount.to_i << choose_plural(amount.to_i, integrals)
+    #else
+    #  parts << propisju_int(amount.to_i, 1, integrals, locale)
+    #end
+    parts << write_human_money_part(amount, integrals, locale, number_mod)
 
      if amount.kind_of?(Float)
       remainder = (amount.divmod(1)[1]*100).round
       if (remainder == 100)
-        if number_mod  #прописью или цифрами
-          parts << amount.to_i << choose_plural(amount.to_i + 1, integrals)
-        else
-          parts << propisju_int(amount.to_i + 1, 1, integrals, locale)
-        end
+        #if number_mod  #прописью или цифрами
+        #  parts << amount.to_i << choose_plural(amount.to_i + 1, integrals)
+        #else
+        #  parts << propisju_int(amount.to_i + 1, 1, integrals, locale)
+        #end
+        parts << write_human_money_part(amount + 1, integrals, locale, number_mod)
       else
         kop = remainder.to_i
         unless kop.zero?
           #parts << kop << choose_plural(kop, fractions)
-          if number_mod  #прописью или цифрами
-            parts << kop << choose_plural(kop, fractions)
-          else
-            parts << propisju_int(kop, 1, fractions, locale)
-          end
+          #if number_mod  #прописью или цифрами
+          #  parts << kop << choose_plural(kop, fractions)
+          #else
+          #  parts << propisju_int(kop, 1, fractions, locale)
+          #end
+          parts << write_human_money_part(kop, fractions, locale, number_mod)
         end
       end
     end
