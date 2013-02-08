@@ -186,12 +186,10 @@ module RuPropisju
 
     parts = []
 
-    if flag == true  #прописью или цифрами
+    if flag #прописью или цифрами
       parts << propisju_int(amount.to_i, 1, integrals, locale)
-      puts "AAA"
     else
       parts << amount.to_i << choose_plural(amount.to_i, integrals)
-      puts "BBB"
     end
 
      if amount.kind_of?(Float)
