@@ -374,11 +374,13 @@ module RuPropisju
       end
     end
     plural = [
-      remaining_amount_save,
+      hundreds,
+      tens,
+      ones,
       item_forms[chosen_ordinal],
     ].compact.reject(&:empty?).join(' ').strip
-   # plural = remaining_amount_save.to_s + " " + item_forms[chosen_ordinal]
-
+    
+    debugger
     return plural
   end
 
