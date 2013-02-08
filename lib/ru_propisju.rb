@@ -367,7 +367,7 @@ module RuPropisju
     #  remaining_amount_save,
     #  item_forms[chosen_ordinal],
     #].compact.reject(&:empty?).join(' ').strip
-    remaining_amount_save.to_s + " " + item_forms[chosen_ordinal]
+    plural = remaining_amount_save.to_s + " " + item_forms[chosen_ordinal]
 
     debugger
     return plural
