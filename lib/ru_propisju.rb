@@ -185,7 +185,7 @@ module RuPropisju
       write_amount_of_money_as_number(number_i, locale_data)
     else
       #parts << propisju_int(number.to_i, 1, locale_data, locale)
-      write_amount_of_money_as_word (number_i, locale_data, locale)
+      write_amount_of_money_as_word(number_i, locale_data, locale)
     end
   end
 
