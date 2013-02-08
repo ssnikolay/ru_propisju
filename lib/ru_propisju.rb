@@ -302,7 +302,6 @@ module RuPropisju
 
     parts << write_human_money_part(amount, integrals, locale, number_mod)
 
-    parts << propisju_int(amount.to_i, 1, integrals, locale) unless amount.to_i == 0
     if amount.kind_of?(Float)
       remainder = (amount.divmod(1)[1]*100).round
       if (remainder == 100)
