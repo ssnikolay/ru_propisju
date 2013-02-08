@@ -363,10 +363,11 @@ module RuPropisju
         when 2..4 then chosen_ordinal = 1 # индекс формы меняется
       end
     end
-    plural = [
-      remaining_amount_save,
-      item_forms[chosen_ordinal],
-    ].compact.reject(&:empty?).join(' ').strip
+    #plural = [
+    #  remaining_amount_save,
+    #  item_forms[chosen_ordinal],
+    #].compact.reject(&:empty?).join(' ').strip
+    remaining_amount_save.to_s + " " + item_forms[chosen_ordinal]
 
     debugger
     return plural
