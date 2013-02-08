@@ -321,6 +321,7 @@ module RuPropisju
   def compose_ordinal(remaining_amount_or_nil, gender, item_forms = [], locale = :ru)
 
     remaining_amount = remaining_amount_or_nil.to_i
+    remaining_amount_save = remaining_amount
 
     locale = locale.to_s
 
@@ -363,12 +364,11 @@ module RuPropisju
       end
     end
     plural = [
-      hundreds,
-      tens,
-      ones,
+      remaining_amount_save,
       item_forms[chosen_ordinal],
     ].compact.reject(&:empty?).join(' ').strip
 
+    debugger
     return plural
   end
 
@@ -478,7 +478,6 @@ module RuPropisju
     end
 
     # И только единицы обрабатываем с переданными параметрами
-    debugger
     parts_in_writing.push(compose_ordinal(ones, gender, item_forms, locale))
 
     
