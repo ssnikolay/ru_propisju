@@ -478,9 +478,10 @@ module RuPropisju
     end
 
     # И только единицы обрабатываем с переданными параметрами
+    debugger
     parts_in_writing.push(compose_ordinal(ones, gender, item_forms, locale))
 
-    debugger
+    
     parts_in_writing.compact.join(' ')
   end
 
