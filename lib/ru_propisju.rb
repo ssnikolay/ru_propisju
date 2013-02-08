@@ -380,7 +380,6 @@ module RuPropisju
       item_forms[chosen_ordinal],
     ].compact.reject(&:empty?).join(' ').strip
     
-    debugger
     return plural
   end
 
