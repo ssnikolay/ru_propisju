@@ -293,7 +293,7 @@ module RuPropisju
   # Выводит целое или дробное число как сумму в евро прописью
   #
   #  evro(32) #=> "тридцать два евро"
-  def evro(amount, locale = 'ru')
+  def evro(amount, number_mod = true, locale = 'ru')
     parts = []
     locale_data = pick_locale(TRANSLATIONS, locale)
 
