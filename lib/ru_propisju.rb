@@ -187,18 +187,18 @@ module RuPropisju
     parts = []
 
     if flag #прописью или цифрами
-      parts << propisju_int(amount.to_i, 1, integrals, locale)
-    else
       parts << amount.to_i << choose_plural(amount.to_i, integrals)
+    else
+      parts << propisju_int(amount.to_i, 1, integrals, locale)
     end
 
      if amount.kind_of?(Float)
       remainder = (amount.divmod(1)[1]*100).round
       if (remainder == 100)
         if flag  #прописью или цифрами
-          parts << propisju_int(amount.to_i + 1, 1, integrals, locale)
-        else
           parts << amount.to_i << choose_plural(amount.to_i + 1, integrals)
+        else
+          parts << propisju_int(amount.to_i + 1, 1, integrals, locale)
         end
       else
         kop = remainder.to_i
