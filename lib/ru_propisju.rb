@@ -179,12 +179,13 @@ module RuPropisju
   #   rublej(345.2) #=> "триста сорок пять рублей 20 копеек"
   
   def write_human_money_part(number, locale_data, locale, number_mod)
+    number_i = number.to_i
     if number_mod #прописью или цифрами
       #parts << number.to_i << choose_plural(number.to_i, locale_data)
-      write_amount_of_money_as_number (number.to_i, locale_data)
+      write_amount_of_money_as_number(number_i, locale_data)
     else
       #parts << propisju_int(number.to_i, 1, locale_data, locale)
-      write_amount_of_money_as_word (number.to_i, locale_data, locale)
+      write_amount_of_money_as_word (number_i, locale_data, locale)
     end
   end
 
