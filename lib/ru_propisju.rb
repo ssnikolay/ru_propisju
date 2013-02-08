@@ -185,17 +185,21 @@ module RuPropisju
     return zero(locale_data, integrals, fractions, locale == :ru) if amount.zero?
 
     parts = []
-    
-    unless amount.to_i == 0 or number_mod  #прописью или цифрами
-      parts << propisju_int(amount.to_i, 1, integrals, locale) 
+
+    unless number_mod  #прописью или цифрами
+      parts << propisju_int(amount.to_i, 1, integrals, locale)
     else
-      parts << amount.to_i << choose_plural(amount.to_i, fractions)
+      parts << amount.to_i << choose_plural(amount.to_i, integrals)
     end
 
      if amount.kind_of?(Float)
       remainder = (amount.divmod(1)[1]*100).round
       if (remainder == 100)
-        parts = [propisju_int(amount.to_i + 1, 1, integrals, locale)]
+        unless number_mod  #прописью или цифрами
+          parts << propisju_int(amount.to_i + 1, 1, integrals, locale)
+        else
+          parts << amount.to_i << choose_plural(amount.to_i + 1, integrals)
+        end
       else
         kop = remainder.to_i
         unless kop.zero?
@@ -486,7 +490,7 @@ module RuPropisju
     # И только единицы обрабатываем с переданными параметрами
     parts_in_writing.push(compose_ordinal(ones, gender, item_forms, locale))
 
-    
+
     parts_in_writing.compact.join(' ')
   end
 
