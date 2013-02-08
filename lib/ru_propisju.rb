@@ -177,7 +177,7 @@ module RuPropisju
   # Выводит целое или дробное число как сумму в рублях прописью
   #
   #   rublej(345.2) #=> "триста сорок пять рублей 20 копеек"
-  def rublej(amount, flag = true, locale = :ru)
+  def rublej(amount, number_mod = true, locale = :ru)
     locale_data = pick_locale(TRANSLATIONS, locale)
     integrals = locale_data[:rub_integral]
     fractions = locale_data[:rub_fraction]
@@ -186,7 +186,7 @@ module RuPropisju
 
     parts = []
 
-    if flag #прописью или цифрами
+    if number_mod #прописью или цифрами
       parts << amount.to_i << choose_plural(amount.to_i, integrals)
     else
       parts << propisju_int(amount.to_i, 1, integrals, locale)
@@ -195,7 +195,7 @@ module RuPropisju
      if amount.kind_of?(Float)
       remainder = (amount.divmod(1)[1]*100).round
       if (remainder == 100)
-        if flag  #прописью или цифрами
+        if number_mod  #прописью или цифрами
           parts << amount.to_i << choose_plural(amount.to_i + 1, integrals)
         else
           parts << propisju_int(amount.to_i + 1, 1, integrals, locale)
@@ -203,7 +203,12 @@ module RuPropisju
       else
         kop = remainder.to_i
         unless kop.zero?
-          parts << kop << choose_plural(kop, fractions)
+          #parts << kop << choose_plural(kop, fractions)
+          if number_mod  #прописью или цифрами
+            parts << kop << choose_plural(kop, fractions)
+          else
+            parts << propisju_int(kop, 1, fractions, locale)
+          end
         end
       end
     end
