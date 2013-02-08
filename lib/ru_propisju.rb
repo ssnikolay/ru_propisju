@@ -177,7 +177,7 @@ module RuPropisju
   # Выводит целое или дробное число как сумму в рублях прописью
   #
   #   rublej(345.2) #=> "триста сорок пять рублей 20 копеек"
-  def rublej(amount, locale = :ru)
+  def rublej(amount, number_mod = true, locale = :ru)
     locale_data = pick_locale(TRANSLATIONS, locale)
     integrals = locale_data[:rub_integral]
     fractions = locale_data[:rub_fraction]
@@ -185,8 +185,14 @@ module RuPropisju
     return zero(locale_data, integrals, fractions, locale == :ru) if amount.zero?
 
     parts = []
-    parts << propisju_int(amount.to_i, 1, integrals, locale) unless amount.to_i == 0
-    if amount.kind_of?(Float)
+    
+    unless amount.to_i == 0 or number_mod  #прописью или цифрами
+      parts << propisju_int(amount.to_i, 1, integrals, locale) 
+    else
+      parts << amount.to_i << choose_plural(amount.to_i, fractions)
+    end
+
+     if amount.kind_of?(Float)
       remainder = (amount.divmod(1)[1]*100).round
       if (remainder == 100)
         parts = [propisju_int(amount.to_i + 1, 1, integrals, locale)]
@@ -363,13 +369,12 @@ module RuPropisju
         when 2..4 then chosen_ordinal = 1 # индекс формы меняется
       end
     end
-    #plural = [
-    #  remaining_amount_save,
-    #  item_forms[chosen_ordinal],
-    #].compact.reject(&:empty?).join(' ').strip
-    plural = remaining_amount_save.to_s + " " + item_forms[chosen_ordinal]
+    plural = [
+      remaining_amount_save,
+      item_forms[chosen_ordinal],
+    ].compact.reject(&:empty?).join(' ').strip
+   # plural = remaining_amount_save.to_s + " " + item_forms[chosen_ordinal]
 
-    debugger
     return plural
   end
 
