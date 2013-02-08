@@ -181,10 +181,8 @@ module RuPropisju
   def write_human_money_part(number, locale_data, locale, number_mod)
     number_i = number.to_i
     if number_mod #прописью или цифрами
-      #parts << number.to_i << choose_plural(number.to_i, locale_data)
       write_amount_of_money_as_number(number_i, locale_data)
     else
-      #parts << propisju_int(number.to_i, 1, locale_data, locale)
       write_amount_of_money_as_word(number_i, locale_data, locale)
     end
   end
@@ -207,31 +205,15 @@ module RuPropisju
 
     parts = []
 
-    #if number_mod #прописью или цифрами
-    #  parts << amount.to_i << choose_plural(amount.to_i, integrals)
-    #else
-    #  parts << propisju_int(amount.to_i, 1, integrals, locale)
-    #end
     parts << write_human_money_part(amount, integrals, locale, number_mod)
 
      if amount.kind_of?(Float)
       remainder = (amount.divmod(1)[1]*100).round
       if (remainder == 100)
-        #if number_mod  #прописью или цифрами
-        #  parts << amount.to_i << choose_plural(amount.to_i + 1, integrals)
-        #else
-        #  parts << propisju_int(amount.to_i + 1, 1, integrals, locale)
-        #end
-        parts << write_human_money_part(amount + 1, integrals, locale, number_mod)
+        parts = write_human_money_part(amount + 1, integrals, locale, number_mod)
       else
         kop = remainder.to_i
         unless kop.zero?
-          #parts << kop << choose_plural(kop, fractions)
-          #if number_mod  #прописью или цифрами
-          #  parts << kop << choose_plural(kop, fractions)
-          #else
-          #  parts << propisju_int(kop, 1, fractions, locale)
-          #end
           parts << write_human_money_part(kop, fractions, locale, number_mod)
         end
       end
@@ -255,7 +237,7 @@ module RuPropisju
   # Выводит целое или дробное число как сумму в гривнах прописью
   #
   #  griven(32) #=> "тридцать две гривны"
-  def griven(amount, locale = 'ru')
+  def griven(amount, number_mod = true, locale = 'ru')
     locale_root = pick_locale(TRANSLATIONS, locale)
 
     integrals = locale_root[:uah_integral]
@@ -264,13 +246,18 @@ module RuPropisju
     return zero(locale_root, integrals, fractions, locale == 'ru') if amount.zero?
 
     parts = []
-    parts << propisju_int(amount.to_i, 2, integrals, locale) unless amount.to_i == 0
+    
+    parts << write_human_money_part(amount, integrals, locale, number_mod)
+    
     if amount.kind_of? Float
       remainder = (amount.divmod(1)[1]*100).round
       if remainder == 100
-        parts = [propisju_int(amount.to_i + 1, 2, integrals, locale)]
+        parts = write_human_money_part(amount + 1, integrals, locale, number_mod)
       else
-        parts << propisju_int(remainder.to_i, 2, fractions, locale)
+        kop = remainder.to_i
+        unless kop.zero?
+          parts << write_human_money_part(kop, fractions, locale, number_mod)
+        end
       end
     end
     parts.join(' ')
