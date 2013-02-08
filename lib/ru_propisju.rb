@@ -190,7 +190,7 @@ module RuPropisju
   end
 
   def write_amount_of_money_as_number(number, locale_data)
-    number.to_s <<" "<< choose_plural(number, locale_data)
+    number.to_s + " " + choose_plural(number, locale_data).to_s
   end
 
   def write_amount_of_money_as_word(number, locale_data, locale)
